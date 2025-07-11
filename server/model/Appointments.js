@@ -1,0 +1,32 @@
+const mongoose = require('mongoose');
+const SetAppointment = require('../middleware/SetAppointment');
+
+const AppointmentSchema = new mongoose.schema({
+    Name:{
+        type:String,
+        required:[true, 'İsim alanı zorunludur.']
+    },
+    Surname:{
+        type:String,
+        required:[true, 'Soyad alanı zorunludur.']
+    },
+    Description:{
+        type:String,
+        required:[true, 'Açıklama alanı zorunludur.']
+    },
+    Price:{
+        type:Number,
+        required:[true, 'Fiyat alanı zorunludur.']
+    },
+    DateTime:{
+        type:Date,
+        required:[true, 'Tarih-Saat alanı zorunludur.']
+    }
+})
+
+// ✨ Middleware'i uygula
+SetAppointment(AppointmentSchema);
+
+const Appointment = mongoose.model('Appointment', AppointmentSchema);
+
+module.exports = Appointment;
