@@ -1,6 +1,5 @@
-require('dotenv').config()
-
-const express = require('express')
+import 'dotenv/config'; // bu satır .env dosyasını otomatik yükler
+import express from 'express'
 
 const app = express()
 

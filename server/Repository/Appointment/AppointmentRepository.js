@@ -1,5 +1,5 @@
-const GenericRepository = require('../GenericRepository');
-const Appointment = require('../../model/Appointments');
+import GenericRepository from '../GenericRepository';
+import Appointment from '../../model/Appointments'
 
 class AppointmentRepository extends GenericRepository {
     constructor() {

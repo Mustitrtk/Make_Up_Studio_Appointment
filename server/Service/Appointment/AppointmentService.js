@@ -1,4 +1,4 @@
-const appointmentRepository = require('../../Repository/Appointment/AppointmentRepository');
+import appointmentRepository from '../../Repository/Appointment/AppointmentRepository'
 
 class AppointmentService {
 

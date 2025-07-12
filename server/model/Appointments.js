@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const SetAppointment = require('../middleware/SetAppointment');
+import mongoose from 'mongoose';
+import SetAppointment from "../middleware/SetAppointment"
 
 const AppointmentSchema = new mongoose.schema({
     Name:{
