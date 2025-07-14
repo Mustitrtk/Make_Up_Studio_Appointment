@@ -4,44 +4,24 @@ class GenericRepository{
     }
 
     getAll(){
-        return new Promise((resolve,rejecet)=>{
-            this.model.find({})
-                .then(data => resolve(data))
-                .catch(err =>rejecet(err))
-        })
+        return this.model.find({})
     }
 
     getById(id){
-        return new Promise((resolve,rejecet)=>{
-            this.model.findById(id)
-                .then(data => resolve(data))
-                .catch(err => rejecet(err))
-        })
+        return this.model.findById(id)
     }
 
     create(data){
-        return new Promise((resolve,reject)=>{
-            this.model.create(data)
-                .then(data => resolve(data))
-                .catch(err => reject(err))
-        })
+        return this.model.create(data)
     }
 
     update(id,data){
-        return new Promise((resolve,reject)=>{
-            this.model.findByIdAndUpdate(id,data,{new:true, runValidators: true })
-                .then(data => resolve(data))
-                .catch(err => reject(err))
-        })
+        return this.model.findByIdAndUpdate(id,data,{new:true, runValidators: true })
     }
 
     delete(id) {
-        return new Promise((resolve, reject) => {
-            this.model.findByIdAndDelete(id)
-                .then(data => resolve(data))
-                .catch(err => reject(err));
-        });
+        return this.model.findByIdAndDelete(id)
     }
 }
 
-module.exports = GenericRepository;
+export default GenericRepository;

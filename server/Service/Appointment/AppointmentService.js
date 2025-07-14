@@ -1,91 +1,110 @@
-import appointmentRepository from '../../Repository/Appointment/AppointmentRepository'
+import appointmentRepository from '../../Repository/Appointment/AppointmentRepository.js';
 
 class AppointmentService {
-
-    async getAllAppointments() {
-        try {
-            return await appointmentRepository.getAll();
-        } catch (error) {
-            console.error("Service Error - getAllAppointments:", error);
-            // Hatanın üst katmana (controller) fırlatılması
-            throw new Error('Randevuları alırken bir hata oluştu.');
-        }
+    getAllAppointments() {
+        return appointmentRepository.getAll()
+            .catch(error => {
+                console.error("Service Error - getAllAppointments:", error);
+                throw new Error('Randevuları alırken bir hata oluştu.');
+            });
     }
 
-    async getAppointmentById(id) {
-        try {
-            const appointment = await appointmentRepository.getById(id);
-            if (!appointment) {
-                // Eğer randevu bulunamazsa, bunu bir hata olarak belirt.
-                throw new Error('Belirtilen ID ile randevu bulunamadı.');
-            }
-            return appointment;
-        } catch (error) {
-            console.error(`Service Error - getAppointmentById(${id}):`, error);
-            throw error; // Yakalanan hatayı veya yeni hatayı yukarı fırlat
-        }
+    getAppointmentById(id) {
+        return appointmentRepository.getById(id)
+            .then(appointment => {
+                if (!appointment) {
+                    throw new Error('Belirtilen ID ile randevu bulunamadı.');
+                }
+                return appointment;
+            })
+            .catch(error => {
+                console.error(`Service Error - getAppointmentById(${id}):`, error);
+                throw error;
+            });
     }
 
-    async getAppointmentsByDate(dateStr) {
-        try {
-            const appointments = await appointmentRepository.getByDate(dateStr);
-
-            if (!appointments || appointments.length === 0) {
-                throw new Error('Belirtilen tarihte randevu bulunamadı.');
-            }
-
-            return appointments;
-        } catch (error) {
-            console.error(`Service Error - getAppointmentsByDate(${dateStr}):`, error);
-            throw new Error('Tarihe göre randevular getirilirken bir hata oluştu.');
-        }
+    getAppointmentsByDate(dateStr) {
+        return appointmentRepository.getByDate(dateStr)
+            .then(appointments => {
+                if (!appointments || appointments.length === 0) {
+                    throw new Error('Belirtilen tarihte randevu bulunamadı.');
+                }
+                return appointments;
+            })
+            .catch(error => {
+                console.error(`Service Error - getAppointmentsByDate(${dateStr}):`, error);
+                throw new Error('Tarihe göre randevular getirilirken bir hata oluştu.');
+            });
     }
 
-    async createAppointment(data) {
-        try {
-            // İş mantığı/validasyon
+    createAppointment(data) {
+        return new Promise((resolve, reject) => {
             if (data.Price < 0) {
-                throw new Error('Fiyat negatif olamaz!');
+                return reject(new Error('Fiyat negatif olamaz!'));
             }
-            return await appointmentRepository.create(data);
-        } catch (error) {
-            console.error("Service Error - createAppointment:", error);
-            // Mongoose validasyon hatası olabilir, bunu yönetebiliriz.
-            if (error.name === 'ValidationError') {
-                 throw new Error(`Validasyon Hatası: ${error.message}`);
+
+            const appointmentDate = new Date(data.Date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (appointmentDate < today) {
+                return reject(new Error('Randevu tarihi bugünün tarihinden küçük olamaz.'));
             }
-            throw new Error('Randevu oluşturulurken bir hata oluştu.');
-        }
+
+            appointmentRepository.create(data)
+                .then(resolve)
+                .catch(error => {
+                    console.error("Service Error - createAppointment:", error);
+                    if (error.name === 'ValidationError') {
+                        reject(new Error(`Validasyon Hatası: ${error.message}`));
+                    } else {
+                        reject(new Error('Randevu oluşturulurken bir hata oluştu.'));
+                    }
+                });
+        });
     }
 
-    async updateAppointment(id, data) {
-        try {
-            const updatedAppointment = await appointmentRepository.update(id, data);
-            if (!updatedAppointment) {
-                throw new Error('Güncellenecek randevu bulunamadı.');
+    updateAppointment(id, data) {
+        return new Promise((resolve, reject) => {
+            const appointmentDate = new Date(data.Date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (appointmentDate < today) {
+                return reject(new Error('Randevu tarihi bugünün tarihinden küçük olamaz.'));
             }
-            return updatedAppointment;
-        } catch (error) {
-            console.error(`Service Error - updateAppointment(${id}):`, error);
-            if (error.name === 'ValidationError') {
-                 throw new Error(`Validasyon Hatası: ${error.message}`);
-            }
-            throw new Error('Randevu güncellenirken bir hata oluştu.');
-        }
+
+            appointmentRepository.update(id, data)
+                .then(updatedAppointment => {
+                    if (!updatedAppointment) {
+                        return reject(new Error('Güncellenecek randevu bulunamadı.'));
+                    }
+                    resolve(updatedAppointment);
+                })
+                .catch(error => {
+                    console.error(`Service Error - updateAppointment(${id}):`, error);
+                    if (error.name === 'ValidationError') {
+                        reject(new Error(`Validasyon Hatası: ${error.message}`));
+                    } else {
+                        reject(new Error('Randevu güncellenirken bir hata oluştu.'));
+                    }
+                });
+        });
     }
 
-    async deleteAppointment(id) {
-        try {
-            const deletedAppointment = await appointmentRepository.delete(id);
-            if (!deletedAppointment) {
-                throw new Error('Silinecek randevu bulunamadı.');
-            }
-            return deletedAppointment;
-        } catch (error) {
-            console.error(`Service Error - deleteAppointment(${id}):`, error);
-            throw new Error('Randevu silinirken bir hata oluştu.');
-        }
+    deleteAppointment(id) {
+        return appointmentRepository.delete(id)
+            .then(deletedAppointment => {
+                if (!deletedAppointment) {
+                    throw new Error('Silinecek randevu bulunamadı.');
+                }
+                return deletedAppointment;
+            })
+            .catch(error => {
+                console.error(`Service Error - deleteAppointment(${id}):`, error);
+                throw new Error('Randevu silinirken bir hata oluştu.');
+            });
     }
 }
 
-module.exports = new AppointmentService();
+export default new AppointmentService();

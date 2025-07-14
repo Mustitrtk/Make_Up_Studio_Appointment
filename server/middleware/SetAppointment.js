@@ -1,6 +1,4 @@
-// middlewares/SetAppointment.js
-
-module.exports = function (schema) {
+export default function (schema) {
     schema.pre('save', function (next) {
         if (this.DateTime) {
             this.DateTime.setSeconds(0);
@@ -8,4 +6,4 @@ module.exports = function (schema) {
         }
         next();
     });
-};
+}

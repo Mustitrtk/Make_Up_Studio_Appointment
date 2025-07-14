@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import SetAppointment from "../middleware/SetAppointment"
+import SetAppointment from "../middleware/SetAppointment.js"
 
-const AppointmentSchema = new mongoose.schema({
+const AppointmentSchema = new mongoose.Schema({
     Name:{
         type:String,
         required:[true, 'İsim alanı zorunludur.']
@@ -29,4 +29,4 @@ SetAppointment(AppointmentSchema);
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
-module.exports = Appointment;
+export default Appointment;

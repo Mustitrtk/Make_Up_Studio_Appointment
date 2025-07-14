@@ -1,5 +1,5 @@
-import GenericRepository from '../GenericRepository';
-import Appointment from '../../model/Appointments'
+import GenericRepository from '../GenericRepository.js';
+import Appointment from '../../model/Appointments.js'
 
 class AppointmentRepository extends GenericRepository {
     constructor() {
@@ -26,4 +26,4 @@ class AppointmentRepository extends GenericRepository {
     }
 }
 
-module.exports = new AppointmentRepository();
+export default new AppointmentRepository();
