@@ -1,13 +1,21 @@
-import 'dotenv/config'; // bu satır .env dosyasını otomatik yükler
-import express from 'express'
-import appointmentRoute from './server/route/AppointmentRoute.js'
+import 'dotenv/config';
+import express from 'express';
+import bodyParser from 'body-parser';
+import db from './server/config/database.js';
 
-const app = express()
+import appointmentRoute from './server/route/AppointmentRoute.js';
 
-const PORT = 3000 | process.env.PORT
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use('/appointment',appointmentRoute)
+app.use(bodyParser.json());
+app.use('/appointment', appointmentRoute);
 
-app.listen(PORT, ()=>{
-    console.log(`Server listening on ${PORT}`)
-})
+const startServer = async () => {
+    await db();
+    app.listen(PORT, () => {
+        console.log(`🚀 Server ${PORT} portunda çalışıyor`);
+    });
+};
+
+startServer();
