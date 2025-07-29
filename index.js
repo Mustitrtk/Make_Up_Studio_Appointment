@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 // Use parser for post size
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(parser.json());
+app.use(bodyParser.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(cors());
 

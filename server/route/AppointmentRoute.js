@@ -1,7 +1,10 @@
 import express from 'express';
 import AppointmentController from '../controller/AppointmentController.js';
+import authMiddleware from '../middleware/AuthMiddleware.js';
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get('/get', AppointmentController.get);
 router.get('/get/:_id', AppointmentController.getById);
