@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import db from './server/config/database.js';
 
 import appointmentRoute from './server/route/AppointmentRoute.js';
@@ -9,10 +11,14 @@ import userRoute from './server/route/UserRoute.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+// Use parser for post size
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(parser.json());
+app.use(cookieParser()); // Add cookie-parser middleware
+app.use(cors());
 
 app.use('/appointment', appointmentRoute);
-app.use('/user', userRoute);
+app.use('/admin', userRoute);
 
 const startServer = async () => {
     await db();
