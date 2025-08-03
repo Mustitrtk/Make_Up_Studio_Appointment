@@ -178,8 +178,8 @@ strong {
 }
 
 .custom-block {
-  background: var(--primary-color);
-  border-top: 20px solid var(--secondary-color);
+  background: var(--p-color);
+  border-top: 20px solid var(--g-color);
   border-radius: var(--border-radius-medium);
   position: relative;
   overflow: hidden;
@@ -797,9 +797,11 @@ strong {
 
 .shop-btn {
   background: var(--primary-color);
-  font-size: var(--copyright-font-size);
-  width: 100px;
-  height: 100px;
+  font-size: 0.7rem;
+  width: auto;
+  height: auto;
+  padding: 10px 18px;
+  border-radius: 50px;
   text-transform: uppercase;
 }
 
