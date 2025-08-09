@@ -1,41 +1,34 @@
-<!doctype html>
-<html lang="en">
+<html lang="tr">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <meta name="description" content="">
-        <meta name="author" content="Tooplate">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="" />
+        <meta name="author" content="Tooplate" />
 
         <title>ELIF - MAKEUP STUDIO</title>
 
         <!-- CSS FILES -->      
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&display=swap" rel="stylesheet" />
 
-        <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&display=swap" rel="stylesheet">
-
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-
-        <link href="css/bootstrap-icons.css" rel="stylesheet">
-
-        <link href="css/tooplate-mini-finance.css" rel="stylesheet">
+        <!-- Public içindeki admin klasörüne göre linkler -->
+        <link href="/admin/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/admin/css/bootstrap-icons.css" rel="stylesheet" />
+        <link href="/admin/css/tooplate-mini-finance.css" rel="stylesheet" />
 
         <!-- FullCalendar CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet" />
 
         <!-- FullCalendar JS -->
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
-
-
     </head>
     
     <body>
         <header class="navbar sticky-top flex-md-nowrap">
             <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
                 <a class="navbar-brand" href="index.html">
-                    <img src="../Images/logo/elif_makeup_studio_siyah.png" alt="Logo" style="max-width: 120px; height: auto;">
+                    <img src="/Images/logo/elif_makeup_studio_siyah.png" alt="Logo" style="max-width: 120px; height: auto;">
                 </a>
             </div>
 
@@ -48,7 +41,7 @@
 
                     <div class="dropdown px-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../Images/logo/elif_makeup_studio_siyah1.png" class="profile-image img-fluid" alt="Profil Görseli">
+                            <img src="/Images/logo/elif_makeup_studio_siyah1.png" class="profile-image img-fluid" alt="Profil Görseli">
                         </a>
 
                         <ul class="dropdown-menu bg-white shadow">
@@ -61,14 +54,14 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item" href="../main/index.html">
+                                <a class="dropdown-item" href="/">
                                     <i class="bi-person me-2"></i>
                                     Ana Sayfa
                                 </a>
                             </li>
 
                             <li>
-                                <a class="dropdown-item" href="help-center.html">
+                                <a class="dropdown-item" href="/appointment/help">
                                     <i class="bi-question-circle me-2"></i>
                                     Yardım
                                 </a>
@@ -92,21 +85,21 @@
                     <div class="position-sticky py-4 px-3 sidebar-sticky">
                         <ul class="nav flex-column h-100">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html">
+                                <a class="nav-link active" aria-current="page" href="/appointment">
                                     <i class="bi-house-fill me-2"></i>
                                     Takvim
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="list.html">
+                                <a class="nav-link" href="/appointment/list">
                                     <i class="bi-list me-2"></i>
                                     Günlük Liste
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="help-center.html">
+                                <a class="nav-link" href="/appointment/help">
                                     <i class="bi-question-circle me-2"></i>
                                     Yardım
                                 </a>
@@ -165,10 +158,6 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col">
-                                                <label>Fiyat</label>
-                                                <input type="number" name="Price" class="form-control" required>
-                                            </div>
-                                            <div class="col">
                                                 <label>Saat</label>
                                                 <input type="time" name="Time" class="form-control" required>
                                             </div>
@@ -185,8 +174,8 @@
                                                 <th>İsim</th>
                                                 <th>Soyisim</th>
                                                 <th>Açıklama</th>
-                                                <th>Fiyat</th>
-                                                <th>Tarih/Saat</th>
+                                                <th>Tarih</th>
+                                                <th>Saat</th>
                                                 <th>Sil</th>
                                             </tr>
                                         </thead>
@@ -214,16 +203,17 @@
             </div>
         </div>
 
+
         <!-- JAVASCRIPT FILES -->
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/custom.js"></script>
+        <script src="/admin/js/jquery.min.js"></script>
+        <script src="/admin/js/bootstrap.bundle.min.js"></script>
+        <script src="/admin/js/custom.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const calendarEl = document.getElementById('calendar');
                 const calendar = new FullCalendar.Calendar(calendarEl, {
-                    locale: 'tr', // 🌟 Türkçe dil desteği
+                    locale: 'tr',
                     initialView: 'dayGridMonth',
                     headerToolbar: {
                         left: 'prev,next today',
@@ -231,7 +221,7 @@
                         right: 'dayGridMonth'
                     },
                     selectable: true,
-                    events: '/api/appointments/events',
+                    events: '/appointment/get',
                     dateClick: function(info) {
                         const today = new Date();
                         if (new Date(info.dateStr) < today.setHours(0,0,0,0)) {
@@ -246,12 +236,11 @@
                 });
                 calendar.render();
 
-                // Randevu ekleme
                 $('#appointmentForm').submit(function(e) {
                     e.preventDefault();
                     const formData = $(this).serialize();
-                    $.post('/api/appointments', formData, function(newEvent) {
-                        calendar.addEvent(newEvent); // Takvime direkt ekle
+                    $.post('/appointments/create', formData, function(newEvent) {
+                        calendar.addEvent(newEvent); 
                         loadAppointments($('input[name="DateTime"]').val());
                         $('#appointmentForm')[0].reset();
                     });
@@ -259,7 +248,7 @@
 
                 // Listeleme
                 function loadAppointments(date) {
-                    $.get('/api/appointments?date=' + date, function(data) {
+                    $.get('/appointment/getByDate?_date=' + date, function(data) {
                         const list = $('#appointmentList').empty();
                         data.forEach(a => {
                             list.append(`
@@ -267,8 +256,8 @@
                                     <td>${a.Name}</td>
                                     <td>${a.Surname}</td>
                                     <td>${a.Description}</td>
-                                    <td>${a.Price} ₺</td>
                                     <td>${new Date(a.DateTime).toLocaleString()}</td>
+                                    <td>${a.Time} ₺</td>
                                     <td><i class="bi bi-trash delete-btn" data-id="${a._id}"></i></td>
                                 </tr>
                             `);
@@ -280,7 +269,7 @@
                 $(document).on('click', '.delete-btn', function() {
                     const id = $(this).data('id');
                     $.ajax({
-                        url: '/api/appointments/' + id,
+                        url: '/appointment/delete?_id=' + id,
                         type: 'DELETE',
                         success: function() {
                             calendar.refetchEvents();

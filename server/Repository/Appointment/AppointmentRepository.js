@@ -19,7 +19,7 @@ class AppointmentRepository extends GenericRepository {
             this.model.find({
                 DateTime: { $gte: startOfDay, $lte: endOfDay }
             })
-            .sort({ DateTime: 1 })
+            .sort({ Time: 1 })
             .then(data => resolve(data))
             .catch(err => reject(err));
         });

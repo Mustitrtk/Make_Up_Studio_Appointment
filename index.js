@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import db from './server/config/database.js';
 
+import MainRoute from './server/route/MainRoute.js'
 import appointmentRoute from './server/route/AppointmentRoute.js';
 import userRoute from './server/route/UserRoute.js';
 
@@ -17,6 +18,10 @@ app.use(bodyParser.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(cors());
 
+app.use(express.static('public'));
+app.set('view engine','ejs');
+
+app.use('/',MainRoute)
 app.use('/appointment', appointmentRoute);
 app.use('/admin', userRoute);
 

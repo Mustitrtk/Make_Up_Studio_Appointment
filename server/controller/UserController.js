@@ -12,7 +12,7 @@ const UserController = {
 
             res.cookie('token',token,{httpOnly:true});
 
-            res.status(200).json({ success: true, data: user });
+            res.redirect('/appointment');
         } catch (error) {
             res.status(401).json({ success: false, message: error.message });
         }

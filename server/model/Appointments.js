@@ -14,8 +14,9 @@ const AppointmentSchema = new mongoose.Schema({
         type:String,
         required:[true, 'Açıklama alanı zorunludur.']
     },
-    Price:{
-        type:Number,
+    Time: {
+        type: String,
+        required: [true, 'Saat alanı zorunludur.']
     },
     DateTime:{
         type:Date,
@@ -23,7 +24,7 @@ const AppointmentSchema = new mongoose.Schema({
     }
 })
 
-// ✨ Middleware'i uygula
+
 SetAppointment(AppointmentSchema);
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
