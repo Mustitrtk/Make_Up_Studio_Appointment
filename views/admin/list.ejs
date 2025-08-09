@@ -13,7 +13,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&display=swap" rel="stylesheet" />
 
-        <!-- Mutlak yollar ile css linkleri -->
         <link href="/admin/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/admin/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/admin/css/tooplate-mini-finance.css" rel="stylesheet" />
@@ -188,7 +187,7 @@
                                         <div class="row mb-3">
                                             <div class="col">
                                                 <label>Tarih</label>
-                                                <input type="date" name="Date" id="updateDate" class="form-control" required>
+                                                <input type="date" name="DateTime" id="updateDate" class="form-control" required>
                                             </div>
                                             <div class="col">
                                                 <label>Saat</label>
@@ -300,16 +299,11 @@
             $(document).on('click', '.delete-btn', function() {
                 const id = $(this).data('id');
                 if (confirm("Bu kaydı silmek istediğinize emin misiniz?")) {
-                    $.ajax({
-                        url: `/appointment/delete/${id}`,
-                        type: 'DELETE',
-                        success: function() {
-                            alert("Silindi");
-                            loadAppointmentList();
-                        },
-                        error: function() {
-                            alert("Silme işlemi sırasında bir hata oluştu.");
-                        }
+                    $.post(`/appointment/delete/${id}`, function(response) {
+                        alert("Silindi");
+                        loadAppointmentList();
+                    }).fail(function() {
+                        alert("Silme işlemi sırasında bir hata oluştu.");
                     });
                 }
             });
@@ -317,27 +311,39 @@
             // Güncelleme butonuna tıklayınca
             $(document).on('click', '.update-btn', function() {
                 const id = $(this).data('id');
-                $.get(`/appointment/get/${id}`, function(data) {
-                    $('#updateId').val(data._id);
-                    $('#updateName').val(data.Name);
-                    $('#updateSurname').val(data.Surname);
-                    $('#updateDescription').val(data.Description);
-                    $('#updateTime').val(data.Time);
-                    $('#updateDate').val(data.Date);
+                $.get(`/appointment/get/${id}`, function(response) {
+                if (response.success && response.data) {
+                    const item = response.data;
+                    $('#updateId').val(item._id);
+                    $('#updateName').val(item.Name);
+                    $('#updateSurname').val(item.Surname);
+                    $('#updateDescription').val(item.Description);
+                    $('#updateTime').val(item.Time);
+                    let dateValue = "";
+                    if (item.DateTime) {
+                        dateValue = new Date(item.DateTime).toISOString().split('T')[0];
+                    } else if (item.Date) {
+                        dateValue = item.Date;
+                    }
+                    $('#updateDate').val(dateValue);
                     $('#updateModal').modal('show');
-                });
+                } else {
+                    alert('Randevu bulunamadı!');
+                }
             });
+        });
 
-            // Güncelleme formunu gönderme
-            $('#updateForm').submit(function(e) {
-                e.preventDefault();
-                const formData = $(this).serialize();
-                $.post('/appointment/update', formData, function() {
-                    alert("Güncellendi");
+        $('#updateForm').on('submit', function(e) {
+            e.preventDefault();
+            $.post('/appointment/update', $(this).serialize())
+                .done(function() {
                     $('#updateModal').modal('hide');
-                    $('#filterForm').submit(); // Listeyi yenile
+                    loadAppointmentList();
+                })
+                .fail(function() {
+                    alert('Güncelleme sırasında hata oluştu.');
                 });
-            });
+        });
         </script>
     </body>
 </html>

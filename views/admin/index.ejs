@@ -12,7 +12,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&display=swap" rel="stylesheet" />
 
-        <!-- Public içindeki admin klasörüne göre linkler -->
         <link href="/admin/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/admin/css/bootstrap-icons.css" rel="stylesheet" />
         <link href="/admin/css/tooplate-mini-finance.css" rel="stylesheet" />
@@ -270,7 +269,7 @@
 
                 // Listeleme
                 function loadAppointments(date) {
-                    $.get('/appointment/getByDate?_date=' + date, function(response) {
+                    $.get(`/appointment/getByDate?_date=${date}`, function(response) {
                         if (response.success && Array.isArray(response.data)) {
                             const list = $('#appointmentList').empty();
                             response.data.forEach(a => {
@@ -279,7 +278,7 @@
                                         <td>${a.Name}</td>
                                         <td>${a.Surname}</td>
                                         <td>${a.Description}</td>
-                                        <td>${new Date(a.DateTime).toLocaleString()}</td>
+                                        <td>${a.DateTime}</td>
                                         <td>${a.Time}</td>
                                         <td><i class="bi bi-trash delete-btn" data-id="${a._id}"></i></td>
                                     </tr>
@@ -294,13 +293,11 @@
                 // Silme
                 $(document).on('click', '.delete-btn', function() {
                     const id = $(this).data('id');
-                    $.ajax({
-                        url: '/appointment/delete/' + id,
-                        type: 'DELETE',
-                        success: function() {
-                            calendar.refetchEvents();
-                            loadAppointments($('input[name="DateTime"]').val());
-                        }
+                    $.post(`/appointment/delete/${id}`, function() {
+                        calendar.refetchEvents();
+                        loadAppointments($('input[name="DateTime"]').val());
+                    }).fail(function() {
+                        alert("Silme işlemi sırasında bir hata oluştu.");
                     });
                 });
             });

@@ -15,8 +15,8 @@ class GenericRepository{
         return this.model.create(data)
     }
 
-    update(id,data){
-        return this.model.findByIdAndUpdate(id,data,{new:true, runValidators: true })
+    update(data){
+        return this.model.findByIdAndUpdate(data._id,data,{new:true, runValidators: true })
     }
 
     delete(id) {

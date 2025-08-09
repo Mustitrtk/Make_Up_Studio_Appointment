@@ -21,7 +21,7 @@ router.get('/get/:_id', AppointmentController.getById);
 router.get('/getByDate', AppointmentController.getByDate);  
 
 router.post('/create', AppointmentController.create);
-router.put('/update/:_id', AppointmentController.update);
-router.delete('/delete/:_id', AppointmentController.delete);
+router.post('/update', AppointmentController.update);
+router.post('/delete/:_id', AppointmentController.delete);
 
 export default router;

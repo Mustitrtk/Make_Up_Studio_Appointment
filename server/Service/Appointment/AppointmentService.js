@@ -58,7 +58,7 @@ class AppointmentService {
         });
     }
 
-    updateAppointment(id, data) {
+    updateAppointment(data) {
         return new Promise((resolve, reject) => {
             const appointmentDate = new Date(data.Date);
             const today = new Date();
@@ -68,7 +68,7 @@ class AppointmentService {
                 return reject(new Error('Randevu tarihi bugünün tarihinden küçük olamaz.'));
             }
 
-            appointmentRepository.update(id, data)
+            appointmentRepository.update(data)
                 .then(updatedAppointment => {
                     if (!updatedAppointment) {
                         return reject(new Error('Güncellenecek randevu bulunamadı.'));
@@ -76,7 +76,7 @@ class AppointmentService {
                     resolve(updatedAppointment);
                 })
                 .catch(error => {
-                    console.error(`Service Error - updateAppointment(${id}):`, error);
+                    console.error(`Service Error - updateAppointment(${data._id}):`, error);
                     if (error.name === 'ValidationError') {
                         reject(new Error(`Validasyon Hatası: ${error.message}`));
                     } else {
