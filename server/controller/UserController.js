@@ -19,13 +19,8 @@ const UserController = {
     },
 
     logout: async (req, res) => {
-        try {
-            await userService.logout(req);
-            res.clearCookie('connect.sid'); 
-            res.render('main/index');
-        } catch (err) {
-            res.status(500).json({ success: false, message: err.message });
-        }
+        res.clearCookie('token');
+        res.redirect('/');
     }
 };
 

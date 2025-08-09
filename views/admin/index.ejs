@@ -17,10 +17,7 @@
         <link href="/admin/css/tooplate-mini-finance.css" rel="stylesheet" />
 
         <!-- FullCalendar CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet" />
-
-        <!-- FullCalendar JS -->
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/main.min.css" rel="stylesheet" />
     </head>
     
     <body>
@@ -123,7 +120,6 @@
                         <div class="col-lg-12 col-12">
                             <div class="custom-block">
                                 <small>Takvim</small>
-                                <!--Takvim burada-->
                                 <div id="calendar"></div>
                             </div>
                         </div>
@@ -164,7 +160,6 @@
                                         <button type="submit" class="btn btn-primary">Kaydet</button>
                                     </form>
 
-                                    <!-- Liste -->
                                     <hr>
                                     <h5>Randevular</h5>
                                     <table class="table table-bordered">
@@ -202,12 +197,11 @@
             </div>
         </div>
 
-
         <!-- JAVASCRIPT FILES -->
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js'></script>
         <script src="/admin/js/jquery.min.js"></script>
         <script src="/admin/js/bootstrap.bundle.min.js"></script>
         <script src="/admin/js/custom.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const calendarEl = document.getElementById('calendar');
@@ -217,21 +211,35 @@
                     headerToolbar: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'dayGridMonth'
+                        right: 'dayGridMonth,listWeek'
                     },
                     selectable: true,
-                    events: '/appointment/get',
+
+                    events: function(fetchInfo, successCallback, failureCallback) {
+                        $.get('/appointment/get')
+                            .done(function(response) {
+                                if (response.success && Array.isArray(response.data)) {
+                                    successCallback(response.data);
+                                } else {
+                                    failureCallback(new Error('Randevu verisi hatalı formatta.'));
+                                }
+                            })
+                            .fail(function() {
+                                failureCallback(new Error('Randevular yüklenemedi.'));
+                            });
+                    },
+
                     dateClick: function(info) {
                         const today = new Date();
-                        if (new Date(info.dateStr) < today.setHours(0,0,0,0)) {
+                        today.setHours(0, 0, 0, 0); 
+                        
+                        if (info.date < today) {
                             alert("Geçmiş tarihe randevu eklenemez!");
                             return;
                         }
+                        
                         $('#selectedDate').text(info.dateStr);
                         $('input[name="DateTime"]').val(info.dateStr);
-
-                        $('#appointmentList').empty();
-
                         loadAppointments(info.dateStr);
                         $('#appointmentModal').modal('show');
                     }
@@ -267,20 +275,28 @@
                     });
                 });
 
-                // Listeleme
+                // Tarih formatlama fonksiyonu
+                function formatDateTime(dateTimeStr) {
+                    const dt = new Date(dateTimeStr);
+                    if (isNaN(dt)) return dateTimeStr;
+                    return dt.toLocaleDateString('tr-TR');
+                }
+
+                // Randevu listeleme
                 function loadAppointments(date) {
                     $.get(`/appointment/getByDate?_date=${date}`, function(response) {
                         if (response.success && Array.isArray(response.data)) {
                             const list = $('#appointmentList').empty();
                             response.data.forEach(a => {
+                                const formattedDateTime = formatDateTime(a.DateTime);
                                 list.append(`
                                     <tr>
                                         <td>${a.Name}</td>
                                         <td>${a.Surname}</td>
                                         <td>${a.Description}</td>
-                                        <td>${a.DateTime}</td>
+                                        <td>${formattedDateTime}</td>
                                         <td>${a.Time}</td>
-                                        <td><i class="bi bi-trash delete-btn" data-id="${a._id}"></i></td>
+                                        <td><i class="bi bi-trash delete-btn" data-id="${a._id}" style="cursor:pointer;"></i></td>
                                     </tr>
                                 `);
                             });
@@ -290,7 +306,7 @@
                     });
                 }
 
-                // Silme
+                // Silme işlemi
                 $(document).on('click', '.delete-btn', function() {
                     const id = $(this).data('id');
                     $.post(`/appointment/delete/${id}`, function() {
