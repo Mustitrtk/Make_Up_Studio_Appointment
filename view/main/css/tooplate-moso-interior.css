@@ -502,19 +502,6 @@ strong {
 
 
 /*---------------------------------------
-  SITE HEADER              
------------------------------------------*/
-.site-header {
-  background-image: url('../images/empty-living-room-with-blue-sofa-plants-table-empty-white-wall-background-3d-rendering.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  padding-top: 150px;
-  padding-bottom: 150px;
-}
-
-
-/*---------------------------------------
   HERO              
 -----------------------------------------*/
 .hero-section {
@@ -594,7 +581,7 @@ strong {
   FEATURED              
 -----------------------------------------*/
 .featured-section {
-  background-image: url('../images/empty-living-room-with-blue-sofa-plants-table-empty-white-wall-background-3d-rendering.jpg');
+  background-image: url('../../Images/Pictures/MakyajNedimeGenis.JPG');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -777,8 +764,10 @@ strong {
 }
 
 .shop-image {
-  display: block;
-  border-radius: var(--border-radius-medium);
+    width: 100%;
+    height: 300px; /* istediğin sabit yükseklik */
+    object-fit: cover; /* resmi orantılı kırpar */
+    border-radius: 8px; /* köşeler yumuşak olsun istersen */
 }
 
 .shop-body {
