@@ -225,7 +225,6 @@
         <!-- JAVASCRIPT FILES -->
         <script src="/admin/js/jquery.min.js"></script>
         <script src="/admin/js/bootstrap.bundle.min.js"></script>
-        <script src="/admin/js/apexcharts.min.js"></script>
         <script src="/admin/js/custom.js"></script>
         <script>
             // Varsayılan olarak bugünün tarihi
@@ -262,16 +261,54 @@
                 });
             });
 
+            function loadAppointmentList() {
+                const selectedDate = document.getElementById('filterDate').value;
+
+                $.get(`/appointment/getByDate?_date=${selectedDate}`, function(response) {
+                    if (response.success && Array.isArray(response.data)) {
+                        const tbody = $('#appointmentTable');
+                        tbody.empty();
+
+                        response.data.forEach(item => {
+                            tbody.append(`
+                                <tr>
+                                    <td>${new Date(item.DateTime).toLocaleDateString('tr-TR')}</td>
+                                    <td>${item.Name}</td>
+                                    <td>${item.Surname}</td>
+                                    <td>${item.Description || ''}</td>
+                                    <td>${item.Time || ''}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm update-btn" data-id="${item._id}">Güncelle</button>
+                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${item._id}">Sil</button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#appointmentTable').html('<tr><td colspan="6" class="text-center">Randevu bulunamadı.</td></tr>');
+                    }
+                });
+            }
+
+            // Form submit eventi
+            document.getElementById('filterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                loadAppointmentList();
+            });
+
             // Silme işlemi
             $(document).on('click', '.delete-btn', function() {
                 const id = $(this).data('id');
                 if (confirm("Bu kaydı silmek istediğinize emin misiniz?")) {
                     $.ajax({
-                        url: `/appointment/delete?_id=${id}`,
+                        url: `/appointment/delete/${id}`,
                         type: 'DELETE',
                         success: function() {
                             alert("Silindi");
-                            $('#filterForm').submit(); // Listeyi yenile
+                            loadAppointmentList();
+                        },
+                        error: function() {
+                            alert("Silme işlemi sırasında bir hata oluştu.");
                         }
                     });
                 }
@@ -280,7 +317,7 @@
             // Güncelleme butonuna tıklayınca
             $(document).on('click', '.update-btn', function() {
                 const id = $(this).data('id');
-                $.get(`/appointment/getById?_id=${id}`, function(data) {
+                $.get(`/appointment/get/${id}`, function(data) {
                     $('#updateId').val(data._id);
                     $('#updateName').val(data.Name);
                     $('#updateSurname').val(data.Surname);
