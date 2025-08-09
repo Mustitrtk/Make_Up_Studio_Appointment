@@ -16,7 +16,6 @@ const AppointmentSchema = new mongoose.Schema({
     },
     Price:{
         type:Number,
-        required:[true, 'Fiyat alanı zorunludur.']
     },
     DateTime:{
         type:Date,

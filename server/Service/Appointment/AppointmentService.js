@@ -39,9 +39,6 @@ class AppointmentService {
 
     createAppointment(data) {
         return new Promise((resolve, reject) => {
-            if (data.Price < 0) {
-                return reject(new Error('Fiyat negatif olamaz!'));
-            }
 
             const appointmentDate = new Date(data.Date);
             const today = new Date();
