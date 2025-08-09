@@ -124,7 +124,7 @@
                         <div class="col-lg-12 col-12">
                             <div class="custom-block">
                                 <small>Takvim</small>
-                                <!--Takvim buraya gelecek-->
+                                <!--Takvim burada-->
                                 <div id="calendar"></div>
                             </div>
                         </div>
@@ -230,6 +230,9 @@
                         }
                         $('#selectedDate').text(info.dateStr);
                         $('input[name="DateTime"]').val(info.dateStr);
+
+                        $('#appointmentList').empty();
+
                         loadAppointments(info.dateStr);
                         $('#appointmentModal').modal('show');
                     }
@@ -238,30 +241,53 @@
 
                 $('#appointmentForm').submit(function(e) {
                     e.preventDefault();
-                    const formData = $(this).serialize();
-                    $.post('/appointments/create', formData, function(newEvent) {
-                        calendar.addEvent(newEvent); 
-                        loadAppointments($('input[name="DateTime"]').val());
+
+                    $('#appointmentList').empty();
+
+                    const dateStr = $('input[name="DateTime"]').val();
+                    const timeStr = $('input[name="Time"]').val();
+
+                    const dateTime = new Date(`${dateStr}T${timeStr}:00`);
+
+                    const formData = {
+                        Name: $('input[name="Name"]').val(),
+                        Surname: $('input[name="Surname"]').val(),
+                        Description: $('textarea[name="Description"]').val(),
+                        DateTime: dateTime.toISOString(),
+                        Time: timeStr
+                    };
+
+                    $.post('/appointment/create', formData, function(newEvent) {
+                        calendar.addEvent({
+                            title: newEvent.Name,
+                            start: newEvent.DateTime,
+                            allDay: false
+                        });
+                        loadAppointments(dateStr);
                         $('#appointmentForm')[0].reset();
                     });
                 });
 
                 // Listeleme
                 function loadAppointments(date) {
-                    $.get('/appointment/getByDate?_date=' + date, function(data) {
-                        const list = $('#appointmentList').empty();
-                        data.forEach(a => {
-                            list.append(`
-                                <tr>
-                                    <td>${a.Name}</td>
-                                    <td>${a.Surname}</td>
-                                    <td>${a.Description}</td>
-                                    <td>${new Date(a.DateTime).toLocaleString()}</td>
-                                    <td>${a.Time} ₺</td>
-                                    <td><i class="bi bi-trash delete-btn" data-id="${a._id}"></i></td>
-                                </tr>
-                            `);
-                        });
+                    $.get('/appointment/getByDate?_date=' + date, function(response) {
+                        if (response.success && Array.isArray(response.data)) {
+                            const list = $('#appointmentList').empty();
+                            response.data.forEach(a => {
+                                list.append(`
+                                    <tr>
+                                        <td>${a.Name}</td>
+                                        <td>${a.Surname}</td>
+                                        <td>${a.Description}</td>
+                                        <td>${new Date(a.DateTime).toLocaleString()}</td>
+                                        <td>${a.Time}</td>
+                                        <td><i class="bi bi-trash delete-btn" data-id="${a._id}"></i></td>
+                                    </tr>
+                                `);
+                            });
+                        } else {
+                            $('#appointmentList').html('<tr><td colspan="6">Randevu bulunamadı.</td></tr>');
+                        }
                     });
                 }
 

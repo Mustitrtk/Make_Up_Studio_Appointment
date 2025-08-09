@@ -26,10 +26,7 @@ class AppointmentService {
     getAppointmentsByDate(dateStr) {
         return appointmentRepository.getByDate(dateStr)
             .then(appointments => {
-                if (!appointments || appointments.length === 0) {
-                    throw new Error('Belirtilen tarihte randevu bulunamadı.');
-                }
-                return appointments;
+                return appointments || [];
             })
             .catch(error => {
                 console.error(`Service Error - getAppointmentsByDate(${dateStr}):`, error);

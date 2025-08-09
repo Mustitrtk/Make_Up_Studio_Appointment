@@ -6,21 +6,19 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get('/', async(req,res)=>{
-    res.render('admin/index', { url: req.originalUrl })
+router.get('/', (req, res) => {
+  res.render('admin/index', { url: req.originalUrl });
 });
 
-router.get('/list', async(req,res)=>{
-    res.render('admin/list', { url: req.originalUrl })
+router.get('/list', AppointmentController.getByDateDefault);
+
+router.get('/help', (req, res) => {
+  res.render('admin/help-center', { url: req.originalUrl });
 });
 
-router.get('/help', async(req,res)=>{
-    res.render('admin/help-center', { url: req.originalUrl })
-});
-
-router.get('/get', AppointmentController.get);
-router.get('/get/:_id', AppointmentController.getById);
-router.get('/getByDate/:_date', AppointmentController.getByDate);
+router.get('/get', AppointmentController.get);  
+router.get('/get/:_id', AppointmentController.getById);  
+router.get('/getByDate', AppointmentController.getByDate);  
 
 router.post('/create', AppointmentController.create);
 router.put('/update/:_id', AppointmentController.update);

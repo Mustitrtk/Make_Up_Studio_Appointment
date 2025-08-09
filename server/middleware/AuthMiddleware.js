@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (decoded.user_role !== 'admin') {
+        if (decoded.user_role !== 'Admin') {
             return res.status(403).json({ success: false, message: 'Bu işlemi yapmak için yetkiniz bulunmamaktadır.' });
         }
 

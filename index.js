@@ -9,6 +9,8 @@ import MainRoute from './server/route/MainRoute.js'
 import appointmentRoute from './server/route/AppointmentRoute.js';
 import userRoute from './server/route/UserRoute.js';
 
+import seedAdmin from './server/seeder/AdminSeeder.js';
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,12 +20,17 @@ app.use(bodyParser.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(cors());
 
+//EJS
 app.use(express.static('public'));
 app.set('view engine','ejs');
 
+//Routes
 app.use('/',MainRoute)
 app.use('/appointment', appointmentRoute);
 app.use('/admin', userRoute);
+
+//Seed
+//seedAdmin();
 
 const startServer = async () => {
     await db();

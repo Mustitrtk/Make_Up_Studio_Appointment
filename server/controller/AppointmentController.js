@@ -21,10 +21,21 @@ const AppointmentController = {
 
     getByDate: async (req, res) => {
         try {
-            const result = await AppointmentService.getAppointmentsByDate(req.params._date);
+            const dateStr = req.query._date || null;
+            const result = await AppointmentService.getAppointmentsByDate(dateStr);
             res.status(200).json({ success: true, data: result });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
+        }
+    },
+
+    getByDateDefault: async (req, res) => {
+        try {
+        const dateStr = req.query._date || new Date().toISOString().slice(0, 10);
+        const result = await AppointmentService.getAppointmentsByDate(dateStr);
+        res.render('admin/list', { url: req.originalUrl, data:result });
+        } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
         }
     },
 
@@ -39,7 +50,7 @@ const AppointmentController = {
 
     update: async (req, res) => {
         try {
-            const result = await AppointmentService.updateAppointment(req.params._id, req.body);
+            await AppointmentService.updateAppointment(req.params._id, req.body);
             res.status(200).json({ success: true });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
@@ -48,7 +59,7 @@ const AppointmentController = {
 
     delete: async (req, res) => {
         try {
-            const result = await AppointmentService.deleteAppointment(req.params._id);
+            await AppointmentService.deleteAppointment(req.params._id);
             res.status(200).json({ success: true });
         } catch (err) {
             res.status(500).json({ success: false, message: err.message });
