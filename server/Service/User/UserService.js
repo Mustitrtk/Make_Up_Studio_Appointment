@@ -15,6 +15,16 @@ class UserService {
 
         return user;
     }
+
+    async logout(req) {
+        return new Promise((resolve, reject) => {
+            if (!req.session) return resolve();
+            req.session.destroy(err => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+    }
 }
 
 export default new UserService();
