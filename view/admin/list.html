@@ -80,7 +80,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                 <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse mt-3">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse mt-3">
                     <div class="position-sticky py-4 px-3 sidebar-sticky">
                         <ul class="nav flex-column h-100">
                             <li class="nav-item">
@@ -91,14 +91,14 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="list.html">
+                                <a class="nav-link active" href="list.html">
                                     <i class="bi-list me-2"></i>
                                     Günlük Liste
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link active" href="help-center.html">
+                                <a class="nav-link" href="help-center.html">
                                     <i class="bi-question-circle me-2"></i>
                                     Yardım
                                 </a>
@@ -115,24 +115,54 @@
                 </nav>
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
-                    <div class="title-group mb-3">
-                        <h1 class="h2 mb-0">Nasıl Yardımcı Olabilirim?</h1>
+                    <div class="row mb-4">
+                        <div class="col-lg-12">
+                            <form id="filterForm" class="d-flex align-items-end gap-3">
+                                <div>
+                                    <label for="filterDate" class="form-label">Tarih Seç</label>
+                                    <input type="date" id="filterDate" name="filterDate" class="form-control">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Filtrele</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
 
-                    <div class="row my-4">
-
-                        <div class="col-lg-12 col-12">
-                            <div class="custom-block">
-                                <h6 class="mb-4">Çağrı Hattı</h6>
-
-                                <p>
-                                    <strong>Telefon :</strong>
-                                    <a href="#" class="ms-2">
-                                        (+90) 
-                                        5427836952
-                                    </a>
-                                </p>
-                            </div>
+                    <div class="custom-block bg-white">
+                        <h5 class="mb-4">Randevu Listesi</h5>
+                        <div class="table-responsive">
+                            <table class="account-table table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tarih</th>
+                                        <th scope="col">Ad</th>
+                                        <th scope="col">Soyad</th>
+                                        <th scope="col">Açıklama</th>
+                                        <th scope="col">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appointmentTable">
+                                    <tr>
+                                        <td>2025-08-09</td>
+                                        <td>Ad</td>
+                                        <td>Soyad</td>
+                                        <td>Makyaj + saç</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm delete-btn">Sil</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2025-08-09</td>
+                                        <td>Ad2</td>
+                                        <td>Soyad2</td>
+                                        <td>Saç Tasarımı</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm delete-btn">Sil</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -156,7 +186,29 @@
         <!-- JAVASCRIPT FILES -->
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/apexcharts.min.js"></script>
         <script src="js/custom.js"></script>
+        <script>
+            // Varsayılan olarak bugünün tarihi
+            document.getElementById('filterDate').value = new Date().toISOString().split('T')[0];
 
+            // Filtreleme işlemi
+            document.getElementById('filterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selectedDate = document.getElementById('filterDate').value;
+                console.log("Seçilen Tarih:", selectedDate);
+                // Burada AJAX ile backend'e gönderilebilir
+            });
+
+            // Silme işlemi
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    if (confirm("Bu kaydı silmek istediğinize emin misiniz?")) {
+                        e.target.closest('tr').remove();
+                        // Burada backend'e silme isteği gönderilebilir
+                    }
+                }
+            });
+        </script>
     </body>
 </html>
