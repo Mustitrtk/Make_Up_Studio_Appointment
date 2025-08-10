@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.status(401).json({ success: false, message: 'Erişim reddedildi. Lütfen giriş yapın.' });
+        return res.status(401).json({ success: false, message: 'Erişim reddedildi.' });
     }
 
     try {
@@ -25,7 +25,7 @@ const authMiddleware = (req, res, next) => {
 
     } catch (error) {
 
-        return res.status(401).json({ success: false, message: 'Geçersiz veya süresi dolmuş token. Lütfen tekrar giriş yapın.' });
+        return res.status(401).json({ success: false, message: 'Bu işlemi yapmak için yetkiniz bulunmamaktadır.' });
     }
 };
 
