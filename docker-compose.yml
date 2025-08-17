@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    container_name: elif-makeup-studio-node-web-app
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: elif-makeup-studio-mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=adminroot123
+      - MONGO_INITDB_DATABASE=elifMakeupStudio
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
