@@ -18,7 +18,7 @@ jobs:
           host: "77.92.154.214"          # **DIREKT IP** 
           username: "root"               # **DIREKT KULLANICI ADI**
           password: "MvfGiA0nfN"         # **DIREKT ŞİFRE**
-          timeout: "600s"                # 🎯 **BURADA "s" BİRİMİ EKLENDİ**
+          timeout: "600s"                # Timeout: 600 saniye (10 dakika)
           script: |
             # Sunucudaki proje dizinine geç
             cd /root/Make_Up_Studio_Appointment || exit
@@ -29,9 +29,9 @@ jobs:
             git clean -fdx
             
             # Docker temizleme ve yeniden başlat
-            docker-compose down -v --remove-orphans
+            docker compose down -v --remove-orphans
             docker system prune -f --volumes
-            docker-compose up -d --build --force-recreate
+            docker compose up -d --build --force-recreate
 
       - name: Deployment Success
         run: echo "✅ Uygulama güncellendi!"
