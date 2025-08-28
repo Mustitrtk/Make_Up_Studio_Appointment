@@ -15,17 +15,23 @@ jobs:
       - name: SSH Deploy (Direct Values)
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: "77.92.154.214"        
-          username: "root"              
-          password: "MvfGiA0nfN"        
-         
+          host: "77.92.154.214"          # **DIREKT IP** 
+          username: "root"               # **DIREKT KULLANICI ADI**
+          password: "MvfGiA0nfN"         # **DIREKT ŞİFRE**
+          timeout: "600"                 # Timeout: 10 dakika
           script: |
-  
-            cd /root/Make_Up_Studio_Appointment
-
-            git pull origin main
-            docker-compose down
-            docker-compose up -d --build
+            # Sunucudaki proje dizinine geç
+            cd /root/Make_Up_Studio_Appointment || exit
+            
+            # Git reset ile en son haline getir
+            git fetch --all --prune
+            git reset --hard origin/main
+            git clean -fdx
+            
+            # Docker temizleme ve yeniden başlat
+            docker-compose down -v --remove-orphans
+            docker system prune -f --volumes
+            docker-compose up -d --build --force-recreate
 
       - name: Deployment Success
         run: echo "✅ Uygulama güncellendi!"
