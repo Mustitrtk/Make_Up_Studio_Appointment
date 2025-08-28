@@ -1,0 +1,32 @@
+name: Auto-Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: SSH Deploy (SSH Anahtarı Kullanılır)
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: 77.92.154.214
+          username: MvfGiA0nfN
+          script: |
+            # Sunucudaki proje dizinine geçin
+            cd /root/Make_Up_Studio_Appointment  # Dizini burada belirtin
+
+            # Son commit'i çekin (sunucunuz bir Git repo'su olmalı)
+            git pull origin main
+
+            # Docker Compose ile uygulamayı yeniden başlatın
+            docker-compose down
+            docker-compose up -d --build
+
+      - name: Deployment Success
+        run: echo "✅ Uygulama başarıyla güncellendi!"
