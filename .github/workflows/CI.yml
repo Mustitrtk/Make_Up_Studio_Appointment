@@ -18,7 +18,7 @@ jobs:
           host: "77.92.154.214"          # **DIREKT IP** 
           username: "root"               # **DIREKT KULLANICI ADI**
           password: "MvfGiA0nfN"         # **DIREKT ŞİFRE**
-          timeout: "600"                 # Timeout: 10 dakika
+          timeout: "600s"                # 🎯 **BURADA "s" BİRİMİ EKLENDİ**
           script: |
             # Sunucudaki proje dizinine geç
             cd /root/Make_Up_Studio_Appointment || exit
