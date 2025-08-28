@@ -1,9 +1,9 @@
-name: Auto-Deploy to Server
+name: Auto-Deploy to Server (Hardcoded Values)
 
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
@@ -12,21 +12,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: SSH Deploy (SSH Anahtarı Kullanılır)
+      - name: SSH Deploy (Direct Values)
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: 77.92.154.214
-          username: MvfGiA0nfN
+          host: "77.92.154.214"        
+          username: "root"              
+          password: "MvfGiA0nfN"        
+         
           script: |
-            # Sunucudaki proje dizinine geçin
-            cd /root/Make_Up_Studio_Appointment  # Dizini burada belirtin
+  
+            cd /root/Make_Up_Studio_Appointment
 
-            # Son commit'i çekin (sunucunuz bir Git repo'su olmalı)
             git pull origin main
-
-            # Docker Compose ile uygulamayı yeniden başlatın
             docker-compose down
             docker-compose up -d --build
 
       - name: Deployment Success
-        run: echo "✅ Uygulama başarıyla güncellendi!"
+        run: echo "✅ Uygulama güncellendi!"
