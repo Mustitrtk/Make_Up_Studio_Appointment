@@ -1,4 +1,4 @@
-name: Auto-Deploy to Server (Hardcoded Values)
+name: Auto-Deploy to Server 
 
 on:
   push:
@@ -15,18 +15,23 @@ jobs:
       - name: SSH Deploy (Direct Values)
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: "77.92.154.214"          # **DIREKT IP** 
-          username: "root"               # **DIREKT KULLANICI ADI**
-          password: "MvfGiA0nfN"         # **DIREKT ŞİFRE**
-          timeout: "600s"                # Timeout: 600 saniye (10 dakika)
+          host: "77.92.154.214"
+          username: "root"
+          password: "MvfGiA0nfN"
+          timeout: "600s"
           script: |
-            # Sunucudaki proje dizinine geç
+            # Sunucudaki dizine geç
             cd /root/Make_Up_Studio_Appointment || exit
             
-            # Git reset ile en son haline getir
+            # En son commit'i al ve temizle
             git fetch --all --prune
             git reset --hard origin/main
             git clean -fdx
+            
+            # .env dosyasını direkt değerlerle oluştur
+            echo "MONGO_URI=mongodb://root:adminroot123@mongo:27017/elifMakeupStudio?authSource=admin" > .env
+            echo "PORT=3000" >> .env
+            echo "JWT_SECRET=MAKEUP_SECRETS" >> .env
             
             # Docker temizleme ve yeniden başlat
             docker compose down -v --remove-orphans
