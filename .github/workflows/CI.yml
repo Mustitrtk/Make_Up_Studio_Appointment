@@ -1,0 +1,42 @@
+name: Auto-Deploy to Server 
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: SSH Deploy (Direct Values)
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: "77.92.154.214"
+          username: "root"
+          password: "MvfGiA0nfN"
+          timeout: "600s"
+          script: |
+            # Sunucudaki dizine geç
+            cd /root/Make_Up_Studio_Appointment || exit
+            
+            # En son commit'i al ve temizle
+            git fetch --all --prune
+            git reset --hard origin/main
+            git clean -fdx
+            
+            # .env dosyasını direkt değerlerle oluştur
+            echo "MONGO_URI=mongodb://root:adminroot123@mongo:27017/elifMakeupStudio?authSource=admin" > .env
+            echo "PORT=3000" >> .env
+            echo "JWT_SECRET=MAKEUP_SECRETS" >> .env
+            
+            # Docker temizleme ve yeniden başlat
+            docker compose down -v --remove-orphans
+            docker system prune -f --volumes
+            docker compose up -d --build --force-recreate
+
+      - name: Deployment Success
+        run: echo "✅ Uygulama güncellendi!"
