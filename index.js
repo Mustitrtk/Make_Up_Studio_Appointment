@@ -30,7 +30,7 @@ app.use('/appointment', appointmentRoute);
 app.use('/admin', userRoute);
 
 //Seed
-//seedAdmin();
+seedAdmin();
 
 const startServer = async () => {
     await db();
