@@ -9,7 +9,7 @@ import MainRoute from './server/route/MainRoute.js'
 import appointmentRoute from './server/route/AppointmentRoute.js';
 import userRoute from './server/route/UserRoute.js';
 
-//import seedAdmin from './server/seeder/AdminSeeder.js';
+import seedAdmin from './server/seeder/AdminSeeder.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,7 +30,7 @@ app.use('/appointment', appointmentRoute);
 app.use('/admin', userRoute);
 
 //Seed
-//seedAdmin();
+seedAdmin();
 
 const startServer = async () => {
     await db();
